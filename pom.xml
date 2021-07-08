@@ -2,57 +2,47 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>practise</groupId>
-  <artifactId>appium-template</artifactId>
+  <groupId>practise
+
+  </groupId>
+  <artifactId>appium-saucelabs-demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-
-  <name>appium-template</name>
+  <name>appium-saucelabs-demo</name>
   <url>http://maven.apache.org</url>
 
 
   <properties>
-    <aspectj.version>1.8.10</aspectj.version>
+    <aspectj.version>1.9.6</aspectj.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <property name="target.dir" value="${base.dir}/target"/>
     <suiteFile/>
     <envConfig/>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>diconium-test-automation-framework-utils-release</id>
-      <name>diconium test automation framework utils</name>
-      <url>https://nexus.diconium.com/content/repositories/diconium-test-automation-framework-utils-release/</url>
-    </repository>
-    <repository>
-      <id>diconium-test-automation-framework-utils-snapshot</id>
-      <name>diconium test automation framework utils - Snapshots</name>
-      <url>https://nexus.diconium.com/content/repositories/diconium-test-automation-framework-utils-snapshot/</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.8.1</version>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.1</version>
+        <version>3.0.0-M5</version>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
           <systemPropertyVariables>
             <environment>${envConfig}</environment>
           </systemPropertyVariables>
-          <testFailureIgnore>true</testFailureIgnore>
+          <testFailureIgnore>false</testFailureIgnore>
           <suiteXmlFiles>
             <suiteXmlFile>src/test/java/testsuites/${suiteFile}</suiteXmlFile>
           </suiteXmlFiles>
@@ -69,15 +59,43 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>2.10.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>com.theoryinpractise</groupId>
+        <artifactId>googleformatter-maven-plugin</artifactId>
+        <version>1.7.4</version>
+        <executions>
+          <execution>
+            <id>reformat-sources</id>
+            <configuration>
+              <includeStale>false</includeStale>
+              <style>GOOGLE</style>
+              <skip>false</skip>
+            </configuration>
+            <goals>
+              <goal>format</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 
   <dependencies>
 
+    <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
     <dependency>
-      <groupId>com.diconium.qautils</groupId>
-      <artifactId>diconium-test-automation-framework-utils</artifactId>
-      <version>1.2.0</version>
+      <groupId>io.appium</groupId>
+      <artifactId>java-client</artifactId>
+      <version>7.4.1</version>
     </dependency>
 
     <dependency>
@@ -88,17 +106,186 @@
     </dependency>
 
     <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <version>3.1.6</version>
-      <!--      <scope>test</scope>-->
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.13.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.13.0</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+    <!--    <dependency>-->
+    <!--      <groupId>org.slf4j</groupId>-->
+    <!--      <artifactId>slf4j-api</artifactId>-->
+    <!--      <version>1.7.28</version>-->
+    <!--    </dependency>-->
+
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.logging.log4j</groupId>-->
+    <!--      <artifactId>log4j-slf4j-impl</artifactId>-->
+    <!--      <version>2.12.1</version>-->
+    <!--    </dependency>-->
+
     <dependency>
-      <groupId>io.appium</groupId>
-      <artifactId>java-client</artifactId>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <version>1.18.6</version>
+    </dependency>
+
+    <dependency>
+      <!--  Used to provide NotNull annotations -->
+      <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
       <version>7.3.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.yandex.qatools.allure</groupId>
+      <artifactId>allure-testng-adaptor</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+    <dependency>
+      <groupId>ru.yandex.qatools.allure</groupId>
+      <artifactId>allure-core</artifactId>
+      <version>1.5.4</version>
+      <type>pom</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-site-plugin</artifactId>
+      <version>3.9.1</version>
+      <type>maven-plugin</type>
+      <scope>test</scope>
+      <!--      <exclusions>-->
+      <!--        <exclusion>-->
+      <!--          &lt;!&ndash;  exclude because it introduces a transient dependency upon log4j 1.12.2 &ndash;&gt;-->
+      <!--          <groupId>commons-logging</groupId>-->
+      <!--          <artifactId>commons-logging</artifactId>-->
+      <!--        </exclusion>-->
+      <!--        <exclusion>-->
+      <!--          &lt;!&ndash; exclude because doxia has a direct dependency on a newer version and-->
+      <!--          otherwise whitesource gets upset &ndash;&gt;-->
+      <!--          <groupId>commons-collections</groupId>-->
+      <!--          <artifactId>commons-collections</artifactId>-->
+      <!--        </exclusion>-->
+      <!--        <exclusion>-->
+      <!--          <groupId>org.codehaus.plexus</groupId>-->
+      <!--          <artifactId>plexus-utils</artifactId>-->
+      <!--        </exclusion>-->
+      <!--        <exclusion>-->
+      <!--          <groupId>org.apache.httpcomponents</groupId>-->
+      <!--          <artifactId>httpclient</artifactId>-->
+      <!--        </exclusion>-->
+      <!--      </exclusions>-->
+    </dependency>
+
+    <!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils &ndash;&gt;-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.codehaus.plexus</groupId>-->
+    <!--      <artifactId>plexus-utils</artifactId>-->
+    <!--      <version>3.3.0</version>-->
+    <!--    </dependency>-->
+
+    <!--    &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient &ndash;&gt;-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.httpcomponents</groupId>-->
+    <!--      <artifactId>httpclient</artifactId>-->
+    <!--      <version>4.5.13</version>-->
+    <!--    </dependency>-->
+
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20200518</version>
+    </dependency>
+
+    <dependency>
+      <!-- https://mvnrepository.com/artifact/org.awaitility/awaitility -->
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.7</version>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-beanutils</groupId>
+          <artifactId>commons-beanutils</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.6</version>
+    </dependency>
+
+    <dependency>
+      <!-- Override outdated version used by allure -->
+      <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>1.24.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ru.yandex.qatools.allure</groupId>
+      <artifactId>allure-testng-adaptor</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+    <dependency>
+      <groupId>ru.yandex.qatools.allure</groupId>
+      <artifactId>allure-core</artifactId>
+      <version>1.5.4</version>
+      <type>pom</type>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+    <dependency>
+      <groupId>io.github.bonigarcia</groupId>
+      <artifactId>webdrivermanager</artifactId>
+      <version>4.2.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.httpcomponents.client5</groupId>
+          <artifactId>httpclient5</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+      <!--  override version from webdrivermanager -->
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.20</version>
+    </dependency>
+
+    <!-- Trying to resolve java.lang.NoClassDefFoundError -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
     </dependency>
 
     <!--    <dependency>-->
@@ -114,30 +301,17 @@
     <excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
-        <groupId>ru.yandex.qatools.allure</groupId>
         <artifactId>allure-maven-plugin</artifactId>
+        <groupId>ru.yandex.qatools.allure</groupId>
         <version>2.6</version>
       </plugin>
+
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
-        <version>2.3</version>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <configLocation>src/main/resources/checkstyle_config.xml</configLocation>
-        </configuration>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>checkstyle</report>
-            </reports>
-          </reportSet>
-        </reportSets>
+        <version>3.3.0</version>
       </plugin>
+
     </plugins>
   </reporting>
 
